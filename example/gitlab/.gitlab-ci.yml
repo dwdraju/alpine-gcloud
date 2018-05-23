@@ -1,0 +1,21 @@
+image: dwdraju/alpine-gcloud
+
+variables:
+  GCP_PROJECT_ID: $GCLOUD_SERVICE_KEY
+  IMAGE_NAME: $IMAGE_NAME
+
+services:
+  - docker:dind
+
+stages:
+  - publish
+
+publish-image:
+  stage: publish
+  script:
+    - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+    - gcloud config set project $GCP_PROJECT_ID
+    - gcloud container builds submit . --config=cloudbuild.yaml --substitutions BRANCH_NAME=$CI_COMMIT_REF_NAME,_IMAGE_NAME=$IMAGE_NAME
+  only:
+    - branches
