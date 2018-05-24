@@ -18,13 +18,13 @@ docker run -ti --name gsdocker dwdraju/alpine-gcloud gcloud auth login
 
 #### Service Account Authentication
 * Create service account from *IAM & admin*
-* Download the key file in json format and paste it on gcloud.json
+* Download the key file in json format and paste it on service-account-key.json
 * Give permission to the service account as per requirement
-* Get the *GCLOUD_PROJECT_ID*
+* Get the *GCLOUD_PROJECT_ID* and set it as environment variable: `export GCLOUD_PROJECT_ID=myprojectID`
 
 Run the command:
 ```
-docker run -ti -v $(pwd)/gcloud.json:/gcloud.json --name gcdocker dwdraju/alpine-gcloud gcloud auth activate-service-account --key-file=/gcloud.json  --project "$GCLOUD_PROJECT_ID" --quiet
+docker run -ti -v $(pwd)/service-account-key.json:/service-account-key.json --name gcdocker dwdraju/alpine-gcloud gcloud auth activate-service-account --key-file=/service-account-key.json  --project "$GCLOUD_PROJECT_ID" --quiet
 ```
 
 Additional flags like `ACCOUNT_NAME`, `--prompt-for-password` can be used during authentication. Full list is on [Cloud SDK doc](https://cloud.google.com/sdk/gcloud/reference/auth/activate-service-account)
